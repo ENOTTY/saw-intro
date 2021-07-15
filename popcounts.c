@@ -49,9 +49,21 @@ int pop_count_broken1(uint32_t x) {
 	return cnt;
 }
 
+/* BROKEN - random testing won't find this */
 int pop_count_broken2(uint32_t x) {
     if (x == 0xDEADBEEF) return 22;
     return pop_count(x);
+}
+
+/* BROKEN - mask is incorrect when i is between 8 to 31 because it's declared as an 8-bit integer */
+int pop_count_broken3(uint32_t x) {
+	int cnt = 0;
+	int len = 32;
+	for (int i = 0; i < len; i++) {
+		uint8_t mask = 1 << i;
+		if (x & mask) cnt++;
+	}
+	return cnt;
 }
 
 //////////////////// TESTING POPCOUNT ///////////////////
@@ -84,16 +96,33 @@ void random_value_test(int (*fun)(uint32_t), char *name) {
     }
 }
 
-//////////////////// VERIFYING POPCOUNT /////////////////
-bool pop_spec_check(uint32_t x) {
+//////////////////// VERIFYING POPCOUNTS /////////////////
+
+bool pop_spec_check_pop_count(uint32_t x) {
     return (pop_spec(x) == pop_count(x));
+}
+
+bool pop_spec_check_pop_count_ok(uint32_t x) {
+    return (pop_spec(x) == pop_count_ok(x));
+}
+
+bool pop_spec_check_pop_count_broken1(uint32_t x) {
+    return (pop_spec(x) == pop_count_broken1(x));
+}
+
+bool pop_spec_check_pop_count_broken2(uint32_t x) {
+    return (pop_spec(x) == pop_count_broken2(x));
+}
+
+bool pop_spec_check_pop_count_broken3(uint32_t x) {
+    return (pop_spec(x) == pop_count_broken3(x));
 }
 
 int main(void)
 {
-	printf("%d\n", pop_count(3));
-	printf("%d\n", pop_count_ok(3));
-	printf("%d\n", pop_count_broken1(3));
+	printf("%d\n", pop_count(2415925760));
+	printf("%d\n", pop_count_ok(2415925760));
+	printf("%d\n", pop_count_broken3(2415925760));
 	fputs(pop_check() ? "true\n" : "false\n", stdout);
 	return 0;
 }

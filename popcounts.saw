@@ -7,4 +7,8 @@ let pop_is_ok = do {
      returns TRUE;
 };
 
-llvm_verify popmod "pop_spec_check" [] pop_is_ok;
+llvm_verify popmod "pop_spec_check_pop_count" [] pop_is_ok;
+llvm_verify popmod "pop_spec_check_pop_count_ok" [] pop_is_ok;
+llvm_verify popmod "pop_spec_check_pop_count_broken3" [] pop_is_ok;
+llvm_verify popmod "pop_spec_check_pop_count_broken2" [] pop_is_ok;
+llvm_verify popmod "pop_spec_check_pop_count_broken1" [] pop_is_ok;
